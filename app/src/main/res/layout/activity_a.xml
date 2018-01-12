@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="测试指令重排"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_a"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="A"
+        app:layout_constraintTop_toBottomOf="@id/tv_text" />
+
+    <Button
+        android:id="@+id/btn_b"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="B"
+        app:layout_constraintTop_toBottomOf="@id/btn_a" />
+
+    <Button
+        android:id="@+id/btn_c"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="C"
+        app:layout_constraintTop_toBottomOf="@id/btn_b" />
+
+    <Button
+        android:id="@+id/btn_d"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="D"
+        app:layout_constraintTop_toBottomOf="@id/btn_c" />
+
+    <Button
+        android:id="@+id/btn_e"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="E"
+        app:layout_constraintTop_toBottomOf="@id/btn_d" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_start_thread"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="开启线程" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_stop_thread"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_start_thread"
+        android:text="关闭线程" />
+
+</android.support.constraint.ConstraintLayout>
