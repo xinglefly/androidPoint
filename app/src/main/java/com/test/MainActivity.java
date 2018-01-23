@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.Process;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -17,21 +18,35 @@ import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.test.common.ToastUtil;
+import com.test.observer_pattern.ConcreateWatch;
+import com.test.observer_pattern.ConcreateWatched;
+import com.test.observer_pattern.Watch;
+import com.test.observer_pattern.Watched;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, ServiceConnection {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.et_name)
+    EditText etName;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
     private int backClickTime;
-    TextView etName;
     MyService.Binder binder = null;
     NotificationManager manager;
 
@@ -40,11 +55,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,15 +67,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(MainActivity.this, A.class));
             }
         });
-
-        findViewById(R.id.btn_start).setOnClickListener(this);
-        findViewById(R.id.btn_stop).setOnClickListener(this);
-        findViewById(R.id.btn_bind).setOnClickListener(this);
-        findViewById(R.id.btn_unbind).setOnClickListener(this);
-        findViewById(R.id.btn_sync).setOnClickListener(this);
-        findViewById(R.id.btn_notify).setOnClickListener(this);
-
-        etName = (TextView) findViewById(R.id.et_name);
     }
 
     @Override
@@ -80,15 +85,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
+    @OnClick({R.id.btn_start, R.id.btn_stop, R.id.btn_bind, R.id.btn_unbind, R.id.btn_sync, R.id.btn_notify, R.id.btn_observer})
     public void onClick(View view) {
-        Intent intent = new Intent(this,MyService.class);
+        Intent intent = new Intent(this, MyService.class);
         switch (view.getId()) {
             case R.id.btn_start:
-                startService(new Intent(this,MyService.class));
+                startService(new Intent(this, MyService.class));
                 break;
             case R.id.btn_stop:
-                stopService(new Intent(this,MyService.class));
+                stopService(new Intent(this, MyService.class));
                 break;
             case R.id.btn_bind:
                 bindService(new Intent(this, MyService.class), this, Context.BIND_AUTO_CREATE);
@@ -117,16 +122,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 notify.setContentIntent(pi);
 
 
-                manager.notify(0,notify.build());
+                manager.notify(0, notify.build());
 
                 break;
+            case R.id.btn_observer:
+                Watched thief = new ConcreateWatched();
 
+                Watch policeMan = new ConcreateWatch();
+                Watch policeWomen = new ConcreateWatch();
+
+                thief.addWatch(policeMan);
+                thief.addWatch(policeWomen);
+
+                thief.notify("小偷开始行动要去抢银行了！");
+                break;
         }
     }
 
     @Override
     public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-        Log.d(TAG,"onServiceConnected"+componentName+",,"+iBinder.toString());
+        Log.d(TAG, "onServiceConnected" + componentName + ",," + iBinder.toString());
         binder = (MyService.Binder) iBinder;
         binder.getService().setCallback(new MyService.Callback() {
             @Override
@@ -139,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });*/
                 Message message = new Message();
                 Bundle bundle = new Bundle();
-                bundle.putString("data",data);
+                bundle.putString("data", data);
                 message.setData(bundle);
                 handler.sendMessage(message);
             }
@@ -148,12 +163,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onServiceDisconnected(ComponentName componentName) {
-        Log.d(TAG,"onServiceDisconnected");
+        Log.d(TAG, "onServiceDisconnected");
         binder = null;
     }
 
 
-    Handler handler = new Handler(){
+    Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -171,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 getSupportFragmentManager().popBackStack();
             } else {
                 if (backClickTime == 1) {
-                    android.os.Process.killProcess(android.os.Process.myPid());
+                    Process.killProcess(Process.myPid());
                     backClickTime = 0;
                 } else {
                     ToastUtil.showToast(R.string.back_confirm);
