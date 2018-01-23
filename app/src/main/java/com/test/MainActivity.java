@@ -29,6 +29,8 @@ import com.test.observer_pattern.ConcreateWatch;
 import com.test.observer_pattern.ConcreateWatched;
 import com.test.observer_pattern.Watch;
 import com.test.observer_pattern.Watched;
+import com.test.rxjava.SimpleObservable;
+import com.test.rxjava.SimpleObserver;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -85,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick({R.id.btn_start, R.id.btn_stop, R.id.btn_bind, R.id.btn_unbind, R.id.btn_sync, R.id.btn_notify, R.id.btn_observer})
+    @OnClick({R.id.btn_start, R.id.btn_stop, R.id.btn_bind, R.id.btn_unbind, R.id.btn_sync, R.id.btn_notify, R.id.btn_observer, R.id.btn_rxjava_observer})
     public void onClick(View view) {
         Intent intent = new Intent(this, MyService.class);
         switch (view.getId()) {
@@ -135,6 +137,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 thief.addWatch(policeWomen);
 
                 thief.notify("小偷开始行动要去抢银行了！");
+                break;
+            case R.id.btn_rxjava_observer:
+                SimpleObservable simpleObservable = new SimpleObservable();
+                SimpleObserver observer = new SimpleObserver(simpleObservable);
+
+                simpleObservable.setData(1);
+                simpleObservable.setData(2);
+                simpleObservable.setData(2);
+                simpleObservable.setData(3);
                 break;
         }
     }
