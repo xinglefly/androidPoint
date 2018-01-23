@@ -36,10 +36,16 @@
         <activity android:name=".E" />
         <activity android:name=".F" />
 
+        <!--:remote 代表私有的服务，外部不能访问-->
         <service
             android:name=".MyService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true"
+            android:process=":remote" />
+        <service
+            android:name=".ExternalService"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
 
 </manifest>

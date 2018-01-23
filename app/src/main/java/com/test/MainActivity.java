@@ -16,14 +16,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.test.common.ToastUtil;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, ServiceConnection {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    private int backClickTime;
     TextView etName;
     MyService.Binder binder = null;
     NotificationManager manager;
@@ -153,4 +160,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             etName.setText(msg.getData().getString("data"));
         }
     };
+
+    /**
+     * 处理返回键：只有在3秒内按返回2次，才退出应用
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (getSupportFragmentManager().getBackStackEntryCount() >= 1) {
+                getSupportFragmentManager().popBackStack();
+            } else {
+                if (backClickTime == 1) {
+                    android.os.Process.killProcess(android.os.Process.myPid());
+                    backClickTime = 0;
+                } else {
+                    ToastUtil.showToast(R.string.back_confirm);
+                    backClickTime++;
+                    Timer timer = new Timer();
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            backClickTime = 0;
+                        }
+                    }, 3000);
+                }
+            }
+            return true;
+        } else if (keyCode == KeyEvent.KEYCODE_SEARCH) {
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 }
