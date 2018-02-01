@@ -80,9 +80,17 @@
         android:id="@+id/btn_rxjava_observer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="rxjava"
+        android:text="java.util.observable"
         android:layout_marginTop="10dp"
         app:layout_constraintTop_toBottomOf="@id/btn_observer"/>
+
+    <Button
+        android:id="@+id/btn_rxjava"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="rxjava"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/btn_rxjava_observer"/>
 
 
 </android.support.constraint.ConstraintLayout>

@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick({R.id.btn_start, R.id.btn_stop, R.id.btn_bind, R.id.btn_unbind, R.id.btn_sync, R.id.btn_notify, R.id.btn_observer, R.id.btn_rxjava_observer})
+    @OnClick({R.id.btn_start, R.id.btn_stop, R.id.btn_bind, R.id.btn_unbind, R.id.btn_sync, R.id.btn_notify, R.id.btn_observer, R.id.btn_rxjava_observer,R.id.btn_rxjava})
     public void onClick(View view) {
         Intent intent = new Intent(this, MyService.class);
         switch (view.getId()) {
@@ -146,6 +146,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 simpleObservable.setData(2);
                 simpleObservable.setData(2);
                 simpleObservable.setData(3);
+                break;
+            case R.id.btn_rxjava:
+                Intent intent1 = new Intent(this, RxJavaActivity.class);
+                intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent1);
                 break;
         }
     }

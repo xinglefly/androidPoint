@@ -35,6 +35,7 @@
             android:launchMode="standard" />
         <activity android:name=".E" />
         <activity android:name=".F" />
+        <activity android:name=".RxJavaActivity"/>
 
         <!--:remote 代表私有的服务，外部不能访问-->
         <service
